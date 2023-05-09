@@ -11,13 +11,28 @@ class RolesController {
       res.status(200).json({
         success: true,
         data: {
-          roles: data
-        }
-      })
+          roles: data,
+        },
+      });
     } catch (error) {
-      next(error)
+      next(error);
     }
-  }
+  };
+  public getOne = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const data = await this.rolesService.getOne(Number(id));
+
+      res.status(200).json({
+        success: true,
+        data: {
+          role: data,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default RolesController;

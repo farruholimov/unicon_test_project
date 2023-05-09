@@ -13,5 +13,6 @@ export default class RolesRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}/`, this.rolesController.getAll);
+    this.router.get(`${this.path}/:id`, this.rolesController.getOne);
   }
 }
