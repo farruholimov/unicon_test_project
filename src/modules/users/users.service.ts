@@ -6,9 +6,8 @@ import { ICreateUser, IUpdateUser, IUser } from './validation/users.interface';
 export default class {
   private usersDao = new UsersDAO();
 
-  async create({ name, role }: ICreateUser): Promise<IUser> {
-    const admin = await this.usersDao.selectByRole(1);
-    const data = await this.usersDao.create({ name, role, created_by: admin.id });
+  async create({ name, role, created_by }: ICreateUser): Promise<IUser> {
+    const data = await this.usersDao.create({ name, role, created_by });
     if (!data) throw new ErrorResponse(500, 'Failed to Create!');
     return data;
   }
@@ -30,6 +29,10 @@ export default class {
     const data = await this.usersDao.selectById(id);
     if (!data) throw new ErrorResponse(404, 'Not Found!');
     return data;
+  }
+
+  async getByRole(role: number): Promise<IUser[]> {
+    return await this.usersDao.selectByRole(role);
   }
 
   async deleteOne(id: string): Promise<void> {
