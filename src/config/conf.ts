@@ -12,3 +12,15 @@ export const vars = {
     expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,
   },
 };
+
+export const pg = {
+  host: env.PG_HOST,
+  port: env.PG_PORT,
+  user: env.PG_USER,
+  password: env.PG_PASSWORD,
+  database: env.PG_DB_NAME,
+  databaseDev: env.PG_DB_NAME_DEV,
+  migrationsTable: env.PG_MIGRATIONS_TABLE,
+  maxPool: 75,
+  minPool: 2,
+};
