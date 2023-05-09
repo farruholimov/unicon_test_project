@@ -10,10 +10,9 @@ class UsersController {
   public getAll = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { query } = req;
-      const filters = extractQuery(query).filters;
       const sorts = extractQuery(query).sorts;
 
-      const data = await this.usersService.getAll(filters, sorts);
+      const data = await this.usersService.getAll(sorts);
 
       res.status(200).json({
         success: true,

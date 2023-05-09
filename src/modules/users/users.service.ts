@@ -1,13 +1,14 @@
 import { IDefaultQuery } from '../shared/interfaces/query.interface';
 import ErrorResponse from '../shared/utils/errorResponse';
 import UsersDAO from './dao/users.dao';
-import { ICreateUser, ISelectUserFilters, IUpdateUser, IUser } from './validation/users.interface';
+import { ICreateUser, IUpdateUser, IUser } from './validation/users.interface';
 
 export default class {
   private usersDao = new UsersDAO();
 
   async create({ name, role }: ICreateUser): Promise<IUser> {
-    const data = await this.usersDao.create({ name, role });
+    const admin = await this.usersDao.selectByRole(1);
+    const data = await this.usersDao.create({ name, role, created_by: admin.id });
     if (!data) throw new ErrorResponse(500, 'Failed to Create!');
     return data;
   }
@@ -21,8 +22,8 @@ export default class {
     return data;
   }
 
-  async getAll(filters: ISelectUserFilters, sorts: IDefaultQuery): Promise<IUser[]> {
-    return await this.usersDao.selectAll(filters, sorts);
+  async getAll(sorts: IDefaultQuery): Promise<IUser[]> {
+    return await this.usersDao.selectAll(sorts);
   }
 
   async getOne(id: string): Promise<IUser> {

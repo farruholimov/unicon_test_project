@@ -9,6 +9,7 @@ export interface IUser {
 export interface ICreateUser {
   name: string;
   role: number;
+  created_by?: string;
 }
 
 export interface IUpdateUser {
