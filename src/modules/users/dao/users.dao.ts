@@ -64,7 +64,7 @@ export default class UsersDAO {
     ).rows[0];
   }
 
-  async selectByRole(role: number): Promise<IUser> {
+  async selectByRole(role: number): Promise<IUser[]> {
     return (
       await KnexService.raw(
         `
