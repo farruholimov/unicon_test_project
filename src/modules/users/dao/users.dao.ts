@@ -73,7 +73,7 @@ export default class UsersDAO {
           json_build_object('id', roles.id, 'name', roles.name) as role_details
         from users as users
         left join roles on users.role = roles.id
-        where users.id = ?
+        where users.role = ?
         group by users.id, roles.id
       `,
         [role]
