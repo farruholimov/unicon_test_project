@@ -1,12 +1,12 @@
 import { RequestWithUser } from '../../interfaces/routes.interface';
 import UsersService from '../../../users/users.service';
 import { NextFunction, Response } from 'express';
-import { verify } from 'jsonwebtoken';
-import { vars } from '../../../../config/conf';
-import ErrorResponse from '../../utils/errorResponse';
-import { IDecodedToken } from '../../interfaces/auth.interface';
+// import { verify } from 'jsonwebtoken';
+// import { vars } from '../../../../config/conf';
+// import ErrorResponse from '../../utils/errorResponse';
+// import { IDecodedToken } from '../../interfaces/auth.interface';
 
-const token = vars.token;
+// const token = vars.token;
 
 const protect = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
