@@ -17,6 +17,7 @@ export interface IUpdateUser {
   role?: number;
 }
 
-export interface ISelectUserFilters {
+export interface IUserFilter {
   role?: number;
+  org_id?: string;
 }
