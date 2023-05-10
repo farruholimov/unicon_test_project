@@ -87,7 +87,7 @@ class TasksController {
 
       res.status(200).json({
         success: true,
-        message: 'Project Permanently Deleted!',
+        message: 'Task Permanently Deleted!',
       });
     } catch (error) {
       next(error);
