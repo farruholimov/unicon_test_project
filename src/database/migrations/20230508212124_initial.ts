@@ -1,8 +1,6 @@
-import { Knex } from "knex";
-
+import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
-
   await knex.raw(`
     create extension if not exists "uuid-ossp";
   `);
@@ -49,6 +47,7 @@ export async function up(knex: Knex): Promise<void> {
   await knex.raw(`
     create table if not exists projects (
       id uuid primary key default uuid_generate_v4(),
+      name varchar(32) not null,
       org_id uuid not null references organizations(id) on delete cascade,
       created_by uuid not null references users(id),
       created_at timestamp(0) not null default current_timestamp
@@ -63,6 +62,8 @@ export async function up(knex: Knex): Promise<void> {
   await knex.raw(`
     create table if not exists tasks (
       id uuid primary key default uuid_generate_v4(),
+      title varchar(32) not null,
+      description text,
       project_id uuid not null references projects(id) on delete cascade,
       created_by uuid not null references users(id),
       worker_user_id uuid not null references users(id),
@@ -72,9 +73,7 @@ export async function up(knex: Knex): Promise<void> {
       created_at timestamp(0) not null default current_timestamp
     );
   `);
-
 }
-
 
 export async function down(knex: Knex): Promise<void> {
   await knex.raw(`
@@ -88,4 +87,3 @@ export async function down(knex: Knex): Promise<void> {
     drop table if exists task_statuses;
   `);
 }
-
