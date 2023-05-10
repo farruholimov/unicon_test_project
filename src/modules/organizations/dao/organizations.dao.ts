@@ -42,8 +42,8 @@ export default class OrgsDAO {
           o.name, 
           o.created_by, 
           o.created_at,
-          count (ou.id) users_count
-          count (p.id) as projects_count
+          count (ou.id) users_count,
+          count (p.id) as projects_count,
           count (t.id) as tasks_count
 
         from organizations o
