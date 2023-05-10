@@ -7,9 +7,21 @@ export default class OrgUsersDao {
       await KnexService.raw(
         `
           insert into organization_users (org_id, user_id, created_at)
-          values (?, ?, now());
+          values (?, ?, now())
+          returning *;
         `,
         [org_id, user_id]
+      )
+    ).rows[0];
+  }
+
+  async createMany(values: ICreateOrgUser[]): Promise<IOrgUser[]> {
+    return (
+      await KnexService.raw(
+        `? ON CONFLICT (org_id, user_id)
+              DO NOTHING
+              RETURNING *;`,
+        [KnexService('organization_users').insert(values)]
       )
     ).rows;
   }
@@ -73,6 +85,6 @@ export default class OrgUsersDao {
       `,
         [org_id, user_id]
       )
-    ).rows;
+    ).rows[0];
   }
 }
