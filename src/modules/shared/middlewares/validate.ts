@@ -10,24 +10,24 @@ const validationMiddleware = (
 ): RequestHandler => {
   return async (req, res, next) => {
     try {
-      const errors = await validate(plainToInstance(type, req[value]), { skipMissingProperties });
+      const errors = await validate(plainToInstance(type, req[value]), {
+        skipMissingProperties,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      });
       console.log(errors);
 
       if (errors.length >= 1) {
-
         const errorContexts = errors.map((item) => {
-          return { property: item.property, constraints: item.constraints }
-        })
+          return { property: item.property, constraints: item.constraints };
+        });
 
-        throw new ErrorResponse(400, JSON.stringify(errorContexts))
-
+        throw new ErrorResponse(400, JSON.stringify(errorContexts));
+      } else {
+        next();
       }
-      else {
-        next()
-      }
-
     } catch (error) {
-      next(error)
+      next(error);
     }
   };
 };
