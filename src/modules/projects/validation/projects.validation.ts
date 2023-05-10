@@ -6,6 +6,11 @@ export class CreateProjectDTO implements ICreateProject {
   @IsDefined()
   @IsNotEmpty()
   name: string;
+
+  @IsString()
+  @IsDefined()
+  @IsNotEmpty()
+  org_id: string;
 }
 export class UpdateProjectDTO implements IUpdateProject {
   @IsString()
