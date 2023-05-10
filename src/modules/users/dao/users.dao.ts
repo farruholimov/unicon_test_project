@@ -1,6 +1,5 @@
 import KnexService from '../../../database/connection';
-import { getFirst } from '../../shared/utils/utils';
-import { ICreateUser, IUpdateUser, IUser } from '../validation/users.interface';
+import { ICreateUser, IUser, IUserFilter } from '../validation/users.interface';
 import { IDefaultQuery } from 'src/modules/shared/interfaces/query.interface';
 
 export default class UsersDAO {
@@ -17,29 +16,46 @@ export default class UsersDAO {
     ).rows[0];
   }
 
-  async update(id: string, values: IUpdateUser): Promise<IUser> {
-    return getFirst(
-      await KnexService('users')
-        .update({
-          ...values,
-        })
-        .where({ user_id: id })
-        .returning('*')
-    );
+  async update(id: string, values: string): Promise<IUser> {
+    return (
+      await KnexService.raw(
+        `
+          update users 
+          set ${values} 
+          where id = ?
+          returning *;
+        `,
+        [id]
+      )
+    ).rows[0];
   }
 
-  async selectAll(sorts: IDefaultQuery) {
+  async count(): Promise<string> {
+    return (await KnexService.raw(`select count (id) as count from users;`)).rows[0]['count'];
+  }
+
+  async selectAll(filters: IUserFilter, sorts: IDefaultQuery) {
     const { limit, offset, orderBy, order } = sorts;
     return (
       await KnexService.raw(
         `
         select 
-          users.id, users.name, users.role, users.created_by, users.created_at,
-          json_build_object('id', roles.id, 'name', roles.name) as role_details
-        from users as users
-        left join roles on users.role = roles.id
-        group by users.id, roles.id
-        order by users.${orderBy} ${order}
+          u.*,
+          json_build_object('id', r.id, 'name', r.name) as role
+
+        from users u
+        left join roles r on u.role = r.id
+        left join organization_users ou on u.id = ou.user_id
+        ${
+          Object.keys(filters).length > 0
+            ? ' where ' +
+              Object.keys(filters)
+                .map((key) => (key == 'org_id' ? `ou.org_id = '${filters[key]}'` : `${key} = '${filters[key]}'`))
+                .join(' and ')
+            : ''
+        }
+        group by u.id, r.id, ou.id
+        order by u.${orderBy} ${order}
         limit ${limit}
         offset ${offset}
       `
@@ -52,12 +68,27 @@ export default class UsersDAO {
       await KnexService.raw(
         `
         select 
-          users.id, users.name, users.role, users.created_by, users.created_at,
-          json_build_object('id', roles.id, 'name', roles.name) as role_details
-        from users as users
-        left join roles on users.role = roles.id
-        where users.id = ?
-        group by users.id, roles.id
+          u.*,
+          json_build_object('id', r.id, 'name', r.name) as role,
+          (select 
+            jsonb_agg(
+              json_build_object(
+                'id', ou.id,
+                'created_at', ou.created_at,
+                'organization', json_build_object(
+                  'id', o.id,
+                  'name', o.name
+                )
+              )
+            )from organization_users ou
+            inner join organizations o on ou.org_id = o.id
+            where ou.user_id = u.id
+          ) as org_user_data
+
+        from users u
+        left join roles r on u.role = r.id
+        where u.id = ?
+        group by u.id, r.id
       `,
         [id]
       )
