@@ -1,5 +1,4 @@
 import KnexService from '../../../database/connection';
-// import { getFirst } from '../../shared/utils/utils';
 import { IRole } from '../validation/roles.interface';
 
 export default class RolesDao {
