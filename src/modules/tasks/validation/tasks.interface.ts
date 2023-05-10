@@ -24,6 +24,7 @@ export interface IUpdateTask {
   description?: string;
   worker_user_id?: string;
   status?: number;
+  done_at?: string;
   due_date?: Date;
 }
 export interface IAssignTask {
