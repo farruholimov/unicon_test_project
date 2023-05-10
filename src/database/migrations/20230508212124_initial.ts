@@ -67,8 +67,8 @@ export async function up(knex: Knex): Promise<void> {
       project_id uuid not null references projects(id) on delete cascade,
       created_by uuid not null references users(id),
       worker_user_id uuid not null references users(id),
-      status int not null references task_statuses(id),
-      due_date timestamp(0),
+      status int not null references task_statuses(id) default 1,
+      due_date timestamp(0) not null,
       done_at timestamp(0),
       created_at timestamp(0) not null default current_timestamp
     );
