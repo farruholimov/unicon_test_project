@@ -1,7 +1,8 @@
 import { IDefaultQuery } from '../shared/interfaces/query.interface';
 import ErrorResponse from '../shared/utils/errorResponse';
+import { generateUpdateSetClause } from '../shared/utils/utils';
 import UsersDAO from './dao/users.dao';
-import { ICreateUser, IUpdateUser, IUser } from './validation/users.interface';
+import { ICreateUser, IUpdateUser, IUser, IUserFilter } from './validation/users.interface';
 
 export default class {
   private usersDao = new UsersDAO();
@@ -16,13 +17,18 @@ export default class {
     const data = await this.usersDao.selectById(id);
     if (!data) throw new ErrorResponse(404, 'Not Found!');
 
-    const updated_data = await this.usersDao.update(id, values);
+    const body = generateUpdateSetClause(values);
+    const updated_data = await this.usersDao.update(id, body);
     if (!updated_data) throw new ErrorResponse(500, 'Failed to Update!');
-    return data;
+    return updated_data;
   }
 
-  async getAll(sorts: IDefaultQuery): Promise<IUser[]> {
-    return await this.usersDao.selectAll(sorts);
+  async countAll(): Promise<string> {
+    return await this.usersDao.count();
+  }
+
+  async getAll(filters: IUserFilter, sorts: IDefaultQuery): Promise<IUser[]> {
+    return await this.usersDao.selectAll(filters, sorts);
   }
 
   async getOne(id: string): Promise<IUser> {
