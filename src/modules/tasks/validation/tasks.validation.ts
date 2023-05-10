@@ -1,4 +1,4 @@
-import { IsDateString, IsDefined, IsNotEmpty, IsString } from 'class-validator';
+import { IsDateString, IsDefined, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ICreateTask, IUpdateTask } from './tasks.interface';
 
 export class CreateTaskDTO implements ICreateTask {
@@ -20,9 +20,6 @@ export class CreateTaskDTO implements ICreateTask {
   @IsNotEmpty()
   worker_user_id: string;
 
-  @IsString()
-  created_by: string;
-
   @IsDefined()
   @IsNotEmpty()
   @IsDateString()
@@ -35,7 +32,7 @@ export class UpdateTaskDTO implements IUpdateTask {
   @IsString()
   description: string;
 
-  @IsString()
+  @IsNumber()
   status: number;
 
   @IsDateString()
