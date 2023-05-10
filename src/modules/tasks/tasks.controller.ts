@@ -67,7 +67,7 @@ class TasksController {
   public finish = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
-      const data = await this.tasksService.update(id, { status: 3 });
+      const data = await this.tasksService.update(id, { status: 3, done_at: new Date().toUTCString() });
 
       res.status(200).json({
         success: true,
