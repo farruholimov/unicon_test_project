@@ -1,19 +1,19 @@
 import express, { Express, Router } from 'express';
-import errorHandler from "../modules/shared/middlewares/errorHandler";
-import morgan from "morgan"
+import errorHandler from '../modules/shared/middlewares/errorHandler';
+import morgan from 'morgan';
 
 class App {
   public app: Express;
 
   constructor(router: Router) {
-    this.app = express()
-    this.InitializeMiddlewares()
-    this.InitializeRoutes(router)
-    this.InitializeErrorHandling()
+    this.app = express();
+    this.InitializeMiddlewares();
+    this.InitializeRoutes(router);
+    this.InitializeErrorHandling();
   }
 
   public get getServer() {
-    return this.app
+    return this.app;
   }
 
   private InitializeMiddlewares() {
@@ -26,8 +26,8 @@ class App {
     this.app.use('/api', router);
     this.app.use('/health', (req, res) => {
       res.status(200).json({
-        success: true
-      })
+        success: true,
+      });
     });
   }
 
