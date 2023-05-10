@@ -10,9 +10,10 @@ class UsersController {
   public getAll = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { query } = req;
+      const filters = extractQuery(query).filters;
       const sorts = extractQuery(query).sorts;
 
-      const data = await this.usersService.getAll(sorts);
+      const data = await this.usersService.getAll(filters, sorts);
 
       res.status(200).json({
         success: true,
@@ -44,7 +45,8 @@ class UsersController {
   public create = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { name, role }: ICreateUser = req.body;
-      const data = await this.usersService.create({ name, role });
+      const { user } = req;
+      const data = await this.usersService.create({ name, role, created_by: user.id });
 
       res.status(201).json({
         success: true,
