@@ -9,5 +9,7 @@ export class CreateOrgDTO implements ICreateOrg {
 }
 export class UpdateOrgDTO implements IUpdateOrg {
   @IsString()
+  @IsDefined()
+  @IsNotEmpty()
   name: string;
 }
