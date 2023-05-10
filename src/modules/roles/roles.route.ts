@@ -14,7 +14,9 @@ export default class RolesRoute implements Routes {
   }
 
   private initializeRoutes() {
+    // Get All
     this.router.get(`${this.path}/`, protect, check_access('roles', 'read'), this.rolesController.getAll);
+    // Get One
     this.router.get(`${this.path}/:id`, protect, check_access('roles', 'read'), this.rolesController.getOne);
   }
 }

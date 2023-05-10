@@ -14,8 +14,13 @@ export default class AuthRoute implements Routes {
   }
 
   private initializeRoutes() {
+    // Get All Stats
     this.router.get(`${this.path}/`, protect, check_access('stats_all', 'read'), this.stats.statsAll);
+
+    // Get Organization Stats
     this.router.get(`${this.path}/org/:id`, protect, check_access('stats_org', 'read'), this.stats.statsOrg);
+
+    // Get Project Stats
     this.router.get(
       `${this.path}/project/:id`,
       protect,

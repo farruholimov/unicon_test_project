@@ -16,8 +16,13 @@ export default class AuthRoute implements Routes {
   }
 
   private initializeRoutes() {
+    // Get All
     this.router.get(`${this.path}/`, protect, check_access('users', 'read'), this.usersController.getAll);
+
+    // Get One
     this.router.get(`${this.path}/:id`, protect, check_access('users', 'read'), this.usersController.getOne);
+
+    // Create
     this.router.post(
       `${this.path}/`,
       protect,
@@ -25,6 +30,8 @@ export default class AuthRoute implements Routes {
       validate(CreateUserDTO, 'body'),
       this.usersController.create
     );
+
+    // Update
     this.router.put(
       `${this.path}/:id`,
       protect,
@@ -32,6 +39,8 @@ export default class AuthRoute implements Routes {
       validate(UpdateUserDTO, 'body', true),
       this.usersController.update
     );
+
+    // Delete
     this.router.delete(`${this.path}/:id`, protect, check_access('users', 'delete'), this.usersController.delete);
   }
 }

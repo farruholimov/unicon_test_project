@@ -17,8 +17,13 @@ export default class AuthRoute implements Routes {
   }
 
   private initializeRoutes() {
+    // Get All
     this.router.get(`${this.path}/`, protect, check_access('organizations', 'read'), this.orgsController.getAll);
+
+    // Get One
     this.router.get(`${this.path}/:id`, protect, check_access('organizations', 'read'), this.orgsController.getOne);
+
+    // Create
     this.router.post(
       `${this.path}/`,
       protect,
@@ -26,6 +31,8 @@ export default class AuthRoute implements Routes {
       validate(CreateOrgDTO, 'body'),
       this.orgsController.create
     );
+
+    // Add multiple org_users
     this.router.post(
       `${this.path}/staff/multiple/:org_id`,
       protect,
@@ -33,6 +40,8 @@ export default class AuthRoute implements Routes {
       validate(AddOrgUsersDTO, 'body'),
       this.orgsController.addUsers
     );
+
+    // Add org_user
     this.router.post(
       `${this.path}/staff/:org_id`,
       protect,
@@ -40,6 +49,8 @@ export default class AuthRoute implements Routes {
       validate(AddOrgUserDTO, 'body'),
       this.orgsController.addUser
     );
+
+    // Update
     this.router.put(
       `${this.path}/:id`,
       protect,
@@ -47,6 +58,8 @@ export default class AuthRoute implements Routes {
       validate(UpdateOrgDTO, 'body', false),
       this.orgsController.update
     );
+
+    // Delete
     this.router.delete(
       `${this.path}/:id`,
       protect,

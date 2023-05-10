@@ -16,8 +16,10 @@ export default class AuthRoute implements Routes {
   }
 
   private initializeRoutes() {
+    // Get All
     this.router.get(`${this.path}/`, protect, check_access('tasks', 'read'), this.tasksController.getAll);
 
+    // Get By User
     this.router.get(
       `${this.path}/staff/:user_id`,
       protect,
@@ -25,8 +27,10 @@ export default class AuthRoute implements Routes {
       this.tasksController.getByUser
     );
 
+    // Get One
     this.router.get(`${this.path}/:id`, protect, check_access('tasks', 'read'), this.tasksController.getOne);
 
+    // Create
     this.router.post(
       `${this.path}/`,
       protect,
@@ -35,6 +39,7 @@ export default class AuthRoute implements Routes {
       this.tasksController.create
     );
 
+    // Assign To User
     this.router.put(
       `${this.path}/assign`,
       protect,
@@ -43,8 +48,10 @@ export default class AuthRoute implements Routes {
       this.tasksController.assignToUser
     );
 
+    // Set Status As Finished
     this.router.put(`${this.path}/finish/:id`, protect, check_access('tasks', 'update'), this.tasksController.finish);
 
+    // Update
     this.router.put(
       `${this.path}/:id`,
       protect,
@@ -53,6 +60,7 @@ export default class AuthRoute implements Routes {
       this.tasksController.update
     );
 
+    // Delete
     this.router.delete(`${this.path}/:id`, protect, check_access('tasks', 'delete'), this.tasksController.delete);
   }
 }
