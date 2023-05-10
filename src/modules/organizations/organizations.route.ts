@@ -5,6 +5,7 @@ import OrgsController from './organizations.controller';
 import { CreateOrgDTO, UpdateOrgDTO } from './validation/organizations.validation';
 import protect from '../shared/middlewares/auth/protect';
 import check_access from '../shared/middlewares/auth/check_access';
+import { AddOrgUserDTO, AddOrgUsersDTO } from './components/org_users/validation/org_users.validation';
 
 export default class AuthRoute implements Routes {
   public path = '/orgs';
@@ -24,6 +25,20 @@ export default class AuthRoute implements Routes {
       check_access('organizations', 'create'),
       validate(CreateOrgDTO, 'body'),
       this.orgsController.create
+    );
+    this.router.post(
+      `${this.path}/staff/multiple/:org_id`,
+      protect,
+      check_access('organization_users', 'create'),
+      validate(AddOrgUsersDTO, 'body'),
+      this.orgsController.addUsers
+    );
+    this.router.post(
+      `${this.path}/staff/:org_id`,
+      protect,
+      check_access('organization_users', 'create'),
+      validate(AddOrgUserDTO, 'body'),
+      this.orgsController.addUser
     );
     this.router.put(
       `${this.path}/:id`,
