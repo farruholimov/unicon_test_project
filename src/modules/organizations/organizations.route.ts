@@ -44,7 +44,7 @@ export default class AuthRoute implements Routes {
       `${this.path}/:id`,
       protect,
       check_access('organizations', 'update'),
-      validate(UpdateOrgDTO, 'body', true),
+      validate(UpdateOrgDTO, 'body', false),
       this.orgsController.update
     );
     this.router.delete(
