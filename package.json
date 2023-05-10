@@ -6,9 +6,10 @@
   "author": "Farruh Olimov <farruhbekolimov3904@gmail.com>",
   "license": "",
   "scripts": {
-    "build": "rimraf dist && npx tsc",
-    "start": "node dist/index.js",
+    "build": "npx tsc",
+    "start": "npm run updatedb && npm run build && node dist/server/index.js",
     "dev": "ts-node src/server/index.ts",
+    "updatedb": "npm run migrate:latest && npm run seed:run",
     "seed:run": "knex seed:run --knexfile ./src/database/knexfile.ts",
     "seed:make": "knex seed:make --knexfile ./src/database/knexfile.ts",
     "migrate:make": "knex migrate:make --migrations-directory ./src/database/migrations -x ts",
