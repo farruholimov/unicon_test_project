@@ -11,10 +11,9 @@ class OrgsController {
 
   public create = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const { name, created_by }: ICreateOrg = req.body;
+      const { name }: ICreateOrg = req.body;
       const { user } = req;
-      const creator_id = created_by ?? user.id;
-      const data = await this.orgsService.create({ name, created_by: creator_id });
+      const data = await this.orgsService.create({ name, created_by: user.id });
 
       res.status(201).json({
         success: true,
